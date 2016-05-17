@@ -1,5 +1,4 @@
-require_relative "pieces"
-require_relative "display"
+
 
 class Board
   attr_accessor :grid
@@ -37,6 +36,11 @@ class Board
 
   def rows
     @grid
+  end
+
+  def in_bounds?(pos)
+    x, y = pos
+    x.between?(0, 7) && y.between?(0, 7)
   end
 
   def self.default_grid
