@@ -16,7 +16,7 @@ class Board
 
   def update_piece_pos(start_pos, end_pos)
     piece = self[start_pos]
-    self[start_pos] = nil
+    self[start_pos] = @null_piece
     self[end_pos] = piece
   end
 
@@ -44,9 +44,9 @@ class Board
   end
 
   def self.default_grid
-    board = Array.new(2) { Array.new(8) {[Piece.new(:black)]}}
-    board.concat(Array.new(4) {Array.new(8) {[nil]}})
-    board.concat(Array.new(2) {Array.new(8) {[Piece.new(:white)]}})
+    board = Array.new(2) { Array.new(8) {Piece.new(:black)}}
+    board.concat(Array.new(4) {Array.new(8) {NullPiece.new}})
+    board.concat(Array.new(2) {Array.new(8) {Piece.new(:white)}})
   end
 
   class IllegalMoveError < StandardError
