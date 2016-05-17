@@ -1,5 +1,3 @@
-
-
 class Board
   attr_accessor :grid
   def initialize(grid)
@@ -38,15 +36,33 @@ class Board
     @grid
   end
 
+  def empty?(pos)
+    self[pos].is_a?(NullPiece)
+  end
+
   def in_bounds?(pos)
     x, y = pos
     x.between?(0, 7) && y.between?(0, 7)
   end
 
+  def setup_pieces
+    @grid.each_with_index do |row, row_num|
+      row.each_with_index do |square, col_num|
+          if row_num.between?(0, 1)
+            @grid[row_num][col_num] = Piece.new(:black, [row_num, col_num], self)
+          elsif row_num.between?(2, 5)
+            @grid[row_num][col_num] = NullPiece.new
+          else
+            @grid[row_num][col_num] = Piece.new(:white, [row_num, col_num], self)
+          end
+      end
+    end
+  end
+
   def self.default_grid
-    board = Array.new(2) { Array.new(8) {Piece.new(:black)}}
-    board.concat(Array.new(4) {Array.new(8) {NullPiece.new}})
-    board.concat(Array.new(2) {Array.new(8) {Piece.new(:white)}})
+    board = Array.new(2) { Array.new(8) {} }
+    board.concat(Array.new(4) {Array.new(8) {} })
+    board.concat(Array.new(2) {Array.new(8) {} })
   end
 
   class IllegalMoveError < StandardError
@@ -59,7 +75,3 @@ class Board
   end
 
 end
-
-# board = Board.new(Board.default_grid)
-# display = Display.new(board, "Trion")
-# display.render

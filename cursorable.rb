@@ -1,4 +1,5 @@
 require "io/console"
+require "colorize"
 
 module Cursorable
   KEYMAP = {

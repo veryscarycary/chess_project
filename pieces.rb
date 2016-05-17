@@ -1,13 +1,14 @@
 require "singleton"
 
 class Piece
-  attr_accessor :color, :position
+  attr_accessor :color, :position, :board
   # TODO: include name and a way to convert the name to unicode value
   # posisbly with a hash?
 
-  def initialize(color, position)
+  def initialize(color, position, board)
     @color = color
     @position = position
+    @board = board
   end
 
   def valid_move?(end_pos)
@@ -33,33 +34,40 @@ class SlidingPiece < Piece
   def moves(end_pos) # returns array of valid moves
     relative_moves = []
 
-    if @direction.includes?(:straight)
+    if @direction.include?(:straight)
       (-7..7).each do |tile|
         relative_moves << [0, tile]
         relative_moves << [tile, 0]
       end
     end
 
-    if @direction.inlcude?(:diagonal)
+    if @direction.include?(:diagonal)
       (-7..7).count.times do |i|
         7.downto(-7) do |j|
-          relative_moves << [i, j]
-          relative_moves << [j, i]
-          relative_moves << [i, i]
-          relative_moves << [j, j]
+          relative_moves.push([i, j],[j, i], [i, i],[j, j])
         end
       end
+    end
 
-      all_moves = relative_moves.map do |pos|
-        x, y = pos
-        a, b = @current_pos
-        [x+a, y+b]
-      end
-  end
-
-  def valid_move?(start_pos, end_pos)
+    relative_to_actual(relative_moves).select {|move| move.valid_move?(move)}
 
   end
+
+  def relative_to_actual(relative_moves)
+    all_moves = relative_moves.map do |pos|
+      x, y = pos
+      a, b = @current_pos
+      [x+a, y+b]
+    end
+  end
+
+  def valid_move?(end_pos)
+    board.in_bounds?(pos)
+
+  end
+
+
+
 end
 
 class SteppingPiece < Piece
@@ -72,10 +80,9 @@ class Pawn < Piece
   end
 end
 
-class NullPiece < Piece
+class NullPiece
 
   def initialize
-    super(:white)
   end
 
   def to_s

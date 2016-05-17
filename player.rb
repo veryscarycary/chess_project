@@ -1,7 +1,7 @@
 class Player
-  def initialize(name = "Tyrion", board)
+  def initialize(name = "Tyrion", board, display)
     @name = name
-    @display = Display.new(board, self)
+    @display = display
   end
 
   def move
