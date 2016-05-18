@@ -43,6 +43,7 @@ module Cursorable
       exit 0
     when :return, :space
       @cursor_pos
+      @board.handle_selection(@cursor_pos)
     when :left, :right, :up, :down
       update_pos(MOVES[key])
       nil
@@ -60,6 +61,11 @@ module Cursorable
       input << STDIN.read_nonblock(3) rescue nil
       input << STDIN.read_nonblock(2) rescue nil
     end
+    # rescue StandardError => e
+    #   "THIS IS A RESCUE"
+    #   puts e.message
+    #   sleep(2)
+    #   retry
   ensure
     STDIN.echo = true
     STDIN.cooked!

@@ -29,7 +29,11 @@ class Display
       fg = @board.get_color([i, j])
     else
       bg = :yellow
-      fg = @board.get_color([i, j])
+      fg = :black
+    end
+
+    if @board.selected == [i, j]
+      bg = :light_red
     end
     { background: bg, color: fg}
   end
